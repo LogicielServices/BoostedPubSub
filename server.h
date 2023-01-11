@@ -14,9 +14,6 @@
 
 using boost::asio::ip::tcp;
 
-std::map<int, std::string> map;
-std::istringstream oss;
-
 class Server {
 public:
     Server(boost::asio::io_context& io_context, short port)
@@ -44,7 +41,6 @@ private:
     void publish();
     void sendId();
     void doWrite();
-    std::map<int, char*> makeMapFromStream(char* data);
     tcp::socket socket;
     enum { max_length = 1024 };
     char data[max_length];

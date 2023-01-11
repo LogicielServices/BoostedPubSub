@@ -59,20 +59,17 @@ void Client::writeStreamOnSocket(std::string stringOfMap)
 
 
 
-int main(int argc, char* argv[])
-{
-    std::string ip = argv[1];
-    std::string port = argv[2];
-    Client client;
-    client.connect(ip,port);
-    std::string receivedId = client.recvIdFromServer();
-//    client.insertIdInMap(client.recvIdFromServer(),"IBM");
-//    std::string stringOfMap = client.makeStreamFromMap(client.clientMap);
-
-    std::string stringOfMap = receivedId.append("|IBM");
-    client.writeStreamOnSocket(stringOfMap);
-    client.recvDataFromServer();
-
-    while(1){}
-
-}
+//int main(int argc, char* argv[])
+//{
+//    std::string ip = argv[1];
+//    std::string port = argv[2];
+//    Client client;
+//    client.connect(ip,port);
+//    std::string receivedId = client.recvIdFromServer();
+//    std::string stringOfMap = receivedId.append("|IBM");
+//    client.writeStreamOnSocket(stringOfMap);
+//    client.recvDataFromServer();
+//
+//    while(1){}
+//
+//}
