@@ -25,6 +25,7 @@ std::string Client::recvIdFromServer()
 void Client::recvDataFromServer()
 {
     size_t  recvDataLen = boost::asio::read(socket, boost::asio::buffer(recvBuffer,9));
+    std::cout << "receiving data from server: ";
     std::cout.write(recvBuffer,recvDataLen);
     std::cout << std::endl;
 }
@@ -64,9 +65,11 @@ int main(int argc, char* argv[])
     std::string port = argv[2];
     Client client;
     client.connect(ip,port);
-//    std::string receivedId = client.recvIdFromServer();
-    client.insertIdInMap(client.recvIdFromServer(),"IBM");
-    std::string stringOfMap = client.makeStreamFromMap(client.clientMap);
+    std::string receivedId = client.recvIdFromServer();
+//    client.insertIdInMap(client.recvIdFromServer(),"IBM");
+//    std::string stringOfMap = client.makeStreamFromMap(client.clientMap);
+
+    std::string stringOfMap = receivedId.append("|IBM");
     client.writeStreamOnSocket(stringOfMap);
     client.recvDataFromServer();
 

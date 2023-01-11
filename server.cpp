@@ -14,35 +14,21 @@ void Session::doRead()
 {
     std::cout << "Server reading from socket\n" << std::flush;
     auto self(shared_from_this());
-    socket.async_read_some(boost::asio::buffer(data, max_length),
-                           [this, self](boost::system::error_code ec, std::size_t length)
+    socket.async_read_some(boost::asio::buffer(data),
+                           [this](boost::system::error_code ec, std::size_t length)
                            {
                                if (!ec)
                                {
-                                   std::cout << data << std::endl;
-                                   std::string store = data;
-                                   store.insert(4, "|");
-                                   std::cout << "store: " << store << std::endl;
-                                   if(store.substr(6,3) == "IBM")
-                                   {
-                                       for(int i=0;i<50;i++){
-                                           boost::asio::async_write(socket, boost::asio::buffer(data, length),
-                                                                    [this, self](boost::system::error_code ec, std::size_t /*length*/)
-                                                                    {
-                                                                        if (!ec)
-                                                                        {
-                                                                            std::cout <<  "Publishing against IBM!\n";
-                                                                            doRead();
-                                                                        }
-                                                                    });
-                                       }
+                                   std::cout << "data received from client is: " << data << std::endl;
+                                   std::string stringData = data;
+                                   std::vector<std::string> parsed_data;
+                                   boost::algorithm::split(parsed_data, stringData,boost::is_any_of("|"));
 
-
+                                   for(auto parsed: parsed_data){
+                                       std::cout << parsed << std::endl;
                                    }
-                                   else{
-                                       std::cout << "incorrect substr\n";
-                                   }
-                                   doWrite(length);
+                                   filter.insert({std::stoi(parsed_data[0]),parsed_data[1]});
+                                   doWrite();
                                }
                            });
 }
@@ -103,10 +89,10 @@ void Session::handleDisconnections(){
 
 
 
-void Session::doWrite(std::size_t length)
+void Session::doWrite()
 {
     auto self(shared_from_this());
-    boost::asio::async_write(socket, boost::asio::buffer(data, length),
+    boost::asio::async_write(socket, boost::asio::buffer(data),
                              [this, self](boost::system::error_code ec, std::size_t /*length*/)
                              {
                                  if (!ec)
@@ -115,7 +101,6 @@ void Session::doWrite(std::size_t length)
                                  }
                              });
 }
-
 
 
 

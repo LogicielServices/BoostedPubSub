@@ -10,6 +10,7 @@
 #include <utility>
 #include <boost/asio.hpp>
 #include <map>
+#include <boost/algorithm/string.hpp>
 
 using boost::asio::ip::tcp;
 
@@ -42,11 +43,12 @@ private:
     void doRead();
     void publish();
     void sendId();
-    void doWrite(std::size_t length);
+    void doWrite();
     std::map<int, char*> makeMapFromStream(char* data);
     tcp::socket socket;
     enum { max_length = 1024 };
     char data[max_length];
+    std::unordered_map<int, std::string> filter;
     int static id;
 
 };
