@@ -17,8 +17,7 @@ public:
     tcp::socket socket;
     tcp::resolver resolver;
     std::map<int, std::string> clientMap;
-    char receivedId[4];
-    char recvBuffer[9];
+
 public:
     Client()  :
             ioContext(),
@@ -27,10 +26,12 @@ public:
     {}
     void connect(std::string ip, std::string port);
     std::string recvIdFromServer();
-    void insertIdInMap(std::string rcvdId, std::string symbol);
-    std::string makeStreamFromMap(const std::map<int, std::string>& m);
-    void writeStreamOnSocket(std::string stringOfMap);
+    void writeStreamOnSocket(std::string idAndSymbol);
     void recvDataFromServer();
+private:
+    enum { max_length = 1024 };
+    char receivedData[max_length];
+    char receivedId[max_length];
 };
 
 

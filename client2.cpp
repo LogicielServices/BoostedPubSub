@@ -24,52 +24,35 @@ std::string Client::recvIdFromServer()
 
 void Client::recvDataFromServer()
 {
-    size_t  recvDataLen = boost::asio::read(socket, boost::asio::buffer(recvBuffer,9));
+    size_t  recvDataLen = boost::asio::read(socket, boost::asio::buffer(receivedData,9));
     std::cout << "receiving data from server: ";
-    std::cout.write(recvBuffer,recvDataLen);
+    std::cout.write(receivedData,recvDataLen);
     std::cout << std::endl;
 }
 
-void Client::insertIdInMap(std::string rcvdId, std::string symbol)
-{
-    clientMap.insert(std::pair<int, std::string>(std::stoi(rcvdId), symbol));
-    for (const auto &[key, value]: clientMap) {
-        std::cout << "Symbol [" << value << "] " << "is against id [" << key << "]" << std::endl;
-    }
-}
 
 
-std::string Client::makeStreamFromMap(const std::map<int, std::string>& m)
-{
-    std::ostringstream oss;
-    for (const auto& [key, value] : m)
-    {
-        oss << key << " " << value << "\n";
-    }
-    return oss.str();
-}
-
-void Client::writeStreamOnSocket(std::string stringOfMap)
+void Client::writeStreamOnSocket(std::string idAndSymbol)
 {
     boost::asio::streambuf sendBuffer;
     std::ostream os(&sendBuffer);
-    os << stringOfMap;
+    os << idAndSymbol;
     boost::asio::write(socket, sendBuffer);
 }
 
 
 
-//int main(int argc, char* argv[])
-//{
-//    std::string ip = argv[1];
-//    std::string port = argv[2];
-//    Client client;
-//    client.connect(ip,port);
-//    std::string receivedId = client.recvIdFromServer();
-//    std::string stringOfMap = receivedId.append("|IBM");
-//    client.writeStreamOnSocket(stringOfMap);
-//    client.recvDataFromServer();
-//
-//    while(1){}
-//
-//}
+int main(int argc, char* argv[])
+{
+    std::string ip = argv[1];
+    std::string port = argv[2];
+    Client client;
+    client.connect(ip,port);
+    std::string receivedId = client.recvIdFromServer();
+    std::string appendedStrToSend = receivedId.append("|IBM");
+    client.writeStreamOnSocket(appendedStrToSend);
+    client.recvDataFromServer();
+
+    while(1){}
+
+}

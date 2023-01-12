@@ -21,13 +21,13 @@ void Session::doRead()
                                {
                                    std::cout << "data received from client is: " << data << std::endl;
                                    std::string stringData = data;
-                                   std::vector<std::string> parsed_data;
-                                   boost::algorithm::split(parsed_data, stringData,boost::is_any_of("|"));
+                                   std::vector<std::string> parsedData;
+                                   boost::algorithm::split(parsedData, stringData,boost::is_any_of("|"));
 
-                                   for(auto parsed: parsed_data){
+                                   for(auto parsed: parsedData){
                                        std::cout << parsed << std::endl;
                                    }
-                                   filter.insert({std::stoi(parsed_data[0]),parsed_data[1]});
+                                   filter.insert({std::stoi(parsedData[0]),parsedData[1]});
                                    doWrite();
                                }
                            });
@@ -56,7 +56,7 @@ void Session::start()
     sendId();
     doRead();
 //    publish();
-    handleDisconnections();
+//    handleDisconnections();
 }
 
 void Session::handleDisconnections(){
@@ -113,26 +113,26 @@ void Session::doWrite()
 
 
 
-//int main(int argc, char* argv[])
-//{
-//    try
-//    {
-//        if (argc != 2)
-//        {
-//            std::cerr << "Usage: async_tcp_echo_server <port>\n";
-//            return 1;
-//        }
-//
-//        boost::asio::io_context io_context;
-//
-//        Server s(io_context, std::atoi(argv[1]));
-//
-//        io_context.run();
-//    }
-//    catch (std::exception& e)
-//    {
-//        std::cerr << "Exception: " << e.what() << "\n";
-//    }
-//
-//    return 0;
-//}
+int main(int argc, char* argv[])
+{
+    try
+    {
+        if (argc != 2)
+        {
+            std::cerr << "Usage: async_tcp_echo_server <port>\n";
+            return 1;
+        }
+
+        boost::asio::io_context io_context;
+
+        Server s(io_context, std::atoi(argv[1]));
+
+        io_context.run();
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << "Exception: " << e.what() << "\n";
+    }
+
+    return 0;
+}
