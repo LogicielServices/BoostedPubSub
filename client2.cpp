@@ -40,6 +40,10 @@ void Client::writeStreamOnSocket(std::string idAndSymbol)
     boost::asio::write(socket, sendBuffer);
 }
 
+std::string Client::appendSymbol(std::string receivedId)
+{
+    return receivedId.append("|IBM");
+}
 
 
 int main(int argc, char* argv[])
@@ -49,9 +53,9 @@ int main(int argc, char* argv[])
     Client client;
     client.connect(ip,port);
     std::string receivedId = client.recvIdFromServer();
-    std::string appendedStrToSend = receivedId.append("|IBM");
+    std::string appendedStrToSend = client.appendSymbol(receivedId);
     client.writeStreamOnSocket(appendedStrToSend);
-    client.recvDataFromServer();
+//    client.recvDataFromServer();
 
     while(1){}
 

@@ -16,7 +16,7 @@ public:
     boost::asio::io_context ioContext;
     tcp::socket socket;
     tcp::resolver resolver;
-    std::map<int, std::string> clientMap;
+//    std::map<int, std::string> clientMap;
 
 public:
     Client()  :
@@ -28,6 +28,7 @@ public:
     std::string recvIdFromServer();
     void writeStreamOnSocket(std::string idAndSymbol);
     void recvDataFromServer();
+    std::string appendSymbol(std::string receivedId);
 private:
     enum { max_length = 1024 };
     char receivedData[max_length];

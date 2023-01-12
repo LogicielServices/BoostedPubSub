@@ -40,6 +40,7 @@ void Session::sendId()
     boost::asio::write(socket, boost::asio::buffer(std::to_string(id),std::to_string(id).size()));
     id++;
 }
+
 //void Session::publish()
 //{
 ////    std::cout << "data: " << data;
