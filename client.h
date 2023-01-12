@@ -16,7 +16,6 @@ public:
     boost::asio::io_context ioContext;
     tcp::socket socket;
     tcp::resolver resolver;
-//    std::map<int, std::string> clientMap;
 
 public:
     Client()  :

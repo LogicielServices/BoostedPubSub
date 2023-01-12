@@ -27,7 +27,8 @@ void Session::doRead()
                                    for(auto parsed: parsedData){
                                        std::cout << parsed << std::endl;
                                    }
-                                   filter.insert({std::stoi(parsedData[0]),parsedData[1]});
+//                                   filter.insert({std::stoi(parsedData[0]),parsedData[1]});
+                                   filter.insert({parsedData[1], std::stoi(parsedData[0])});
                                    doWrite();
                                }
                            });
@@ -57,7 +58,7 @@ void Session::start()
     sendId();
     doRead();
 //    publish();
-//    handleDisconnections();
+    handleDisconnections();
 }
 
 void Session::handleDisconnections(){

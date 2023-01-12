@@ -16,16 +16,14 @@ void Client::connect(std::string ip, std::string port)
 std::string Client::recvIdFromServer()
 {
     size_t receivedIdLength = boost::asio::read(socket, boost::asio::buffer(receivedId, 4));
-    std::cout << "ID received from server is: ";
-    std::cout.write(receivedId, receivedIdLength);
-    std::cout << std::endl;
-    return receivedId;
+    std::string parsedId(receivedId, receivedIdLength);
+    std::cout << "ID received from server is: " << parsedId << std::endl;
+    return parsedId;
 }
 
 void Client::recvDataFromServer()
 {
     size_t  recvDataLen = boost::asio::read(socket, boost::asio::buffer(receivedData,9));
-    std::cout << "receiving data from server: ";
     std::cout.write(receivedData,recvDataLen);
     std::cout << std::endl;
 }
@@ -34,10 +32,10 @@ void Client::recvDataFromServer()
 
 void Client::writeStreamOnSocket(std::string idAndSymbol)
 {
-    boost::asio::streambuf sendBuffer;
-    std::ostream os(&sendBuffer);
-    os << idAndSymbol;
-    boost::asio::write(socket, sendBuffer);
+//    boost::asio::streambuf sendBuffer;
+//    std::ostream os(&sendBuffer);
+//    os << idAndSymbol;
+    boost::asio::write(socket, boost::asio::buffer(idAndSymbol));
 }
 
 std::string Client::appendSymbol(std::string receivedId)
@@ -52,10 +50,10 @@ int main(int argc, char* argv[])
     std::string port = argv[2];
     Client client;
     client.connect(ip,port);
-    std::string receivedId = client.recvIdFromServer();
+    std::string receivedId = client.recvIdFromServer(); //rcving garbage after ID
     std::string appendedStrToSend = client.appendSymbol(receivedId);
     client.writeStreamOnSocket(appendedStrToSend);
-//    client.recvDataFromServer();
+    client.recvDataFromServer();
 
     while(1){}
 

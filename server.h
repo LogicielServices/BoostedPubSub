@@ -44,8 +44,10 @@ private:
     tcp::socket socket;
     enum { max_length = 1024 };
     char data[max_length];
-    std::unordered_map<int, std::string> filter;
+//    std::unordered_map<int, std::string> filter;
+    std::unordered_map<std::string, int> filter;
     int static id;
+
 
 };
 
