@@ -23,7 +23,7 @@ std::string Client::recvIdFromServer()
 
 void Client::recvDataFromServer()
 {
-    size_t  recvDataLen = boost::asio::read(socket, boost::asio::buffer(receivedData,9));
+    size_t  recvDataLen = boost::asio::read(socket, boost::asio::buffer(receivedData,30));
     std::cout.write(receivedData,recvDataLen);
     std::cout << std::endl;
 }
@@ -32,9 +32,6 @@ void Client::recvDataFromServer()
 
 void Client::writeStreamOnSocket(std::string idAndSymbol)
 {
-//    boost::asio::streambuf sendBuffer;
-//    std::ostream os(&sendBuffer);
-//    os << idAndSymbol;
     boost::asio::write(socket, boost::asio::buffer(idAndSymbol));
 }
 

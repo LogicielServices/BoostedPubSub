@@ -29,10 +29,25 @@ void Session::doRead()
                                    }
 //                                   filter.insert({std::stoi(parsedData[0]),parsedData[1]});
                                    filter.insert({parsedData[1], std::stoi(parsedData[0])});
-                                   doWrite();
+                                   publish();
                                }
                            });
 }
+std::string Session::mockUpdate(std::string symbol)
+{
+    return "Publishing updates against IBM\n";
+}
+
+void Session::publish()
+{
+    for (const auto& [key, value] : filter) {
+
+        std::string messageToPublish = mockUpdate(key);
+        boost::asio::write(socket, boost::asio::buffer(messageToPublish));
+    }
+
+}
+
 
 
 void Session::sendId()
@@ -42,15 +57,7 @@ void Session::sendId()
     id++;
 }
 
-//void Session::publish()
-//{
-////    std::cout << "data: " << data;
-//    std::map<int, std::string> map = makeMapFromStream(oss);
-//    for (const auto& [key, value] : map)
-//    {
-//        std::cout << "key is [" << key << "]" << "value is [" << value << "]" << std::endl;
-//    }
-//}
+
 
 
 void Session::start()
