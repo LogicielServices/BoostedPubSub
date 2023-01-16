@@ -27,15 +27,19 @@ void Session::doRead()
                                    for(auto parsed: parsedData){
                                        std::cout << parsed << std::endl;
                                    }
+
 //                                   filter.insert({std::stoi(parsedData[0]),parsedData[1]});
                                    filter.insert({parsedData[1], std::stoi(parsedData[0])});
                                    onUpdate();
                                }
                            });
 }
+
+
+
 std::string Session::mockUpdate(std::string symbol)
 {
-    return "Publishing updates against IBM\n";
+    return "Client receiving updates on IBM\n";
 }
 
 void Session::onUpdate()
