@@ -1,7 +1,8 @@
 #include <iostream>
-#include "include/server.h"
-#include "include/client.h"
+#include "include/publisher.h"
+#include "include/subcriber.h"
 #include <thread>
+
 
 
 int main(int argc, char* argv[]) {
@@ -14,7 +15,7 @@ int main(int argc, char* argv[]) {
     std::thread publisherThread = std::thread([=]() {
         boost::asio::io_context io_context;
 
-        Publisher s(io_context, std::atoi(argv[2]));
+        Session publisher(io_context, std::atoi(argv[2]));
         io_context.run();
     });
     publisherThread.detach();

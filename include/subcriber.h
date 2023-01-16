@@ -2,8 +2,8 @@
 // Created by saad.hussain on 1/3/2023.
 //
 
-#ifndef ASIOCLIENTSERVER_CLIENT_H
-#define ASIOCLIENTSERVER_CLIENT_H
+#ifndef ASIOCLIENTSERVER_SUBCRIBER_H
+#define ASIOCLIENTSERVER_SUBCRIBER_H
 #include <cstring>
 #include <iostream>
 #include <boost/asio.hpp>
@@ -35,4 +35,4 @@ private:
 };
 
 
-#endif //ASIOCLIENTSERVER_CLIENT_H
+#endif //ASIOCLIENTSERVER_SUBCRIBER_H

@@ -2,8 +2,8 @@
 // Created by saad.hussain on 1/3/2023.
 //
 
-#ifndef ASIOCLIENTSERVER_SERVER_H
-#define ASIOCLIENTSERVER_SERVER_H
+#ifndef ASIOCLIENTSERVER_PUBLISHER_H
+#define ASIOCLIENTSERVER_PUBLISHER_H
 #include <cstdlib>
 #include <iostream>
 #include <memory>
@@ -15,34 +15,38 @@
 
 using boost::asio::ip::tcp;
 
-class Publisher {
+class Session {
 public:
-    Publisher(boost::asio::io_context& io_context, short port)
+    Session(boost::asio::io_context& io_context, short port)
     : acceptor(io_context, tcp::endpoint(tcp::v4(), port))
     {
         accept();
     }
+
 private:
     void accept();
     tcp::acceptor acceptor;
 };
 
-class Session : public std::enable_shared_from_this<Session>
+
+
+
+
+
+
+class Publisher : public std::enable_shared_from_this<Publisher>
 {
 public:
-    Session(tcp::socket socket)
+    Publisher(tcp::socket socket)
     : socket(std::move(socket))
-    {
-//        socket.set_option(boost::asio::socket_base::keep_alive(5));
-    }
+    {}
     void start();
+    void publish(std::string);
 private:
     void handleDisconnections();
     void doRead();
-    void onUpdate();
     void sendId();
     void doWrite();
-    std::string mockUpdate(std::string symbol);
     tcp::socket socket;
     enum { max_length = 1024 };
     char data[max_length];
@@ -53,4 +57,4 @@ private:
 
 };
 
-#endif //ASIOCLIENTSERVER_SERVER_H
+#endif //ASIOCLIENTSERVER_PUBLISHER_H

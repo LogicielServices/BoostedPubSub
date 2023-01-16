@@ -1,16 +1,16 @@
 //
 // Created by saad.hussain on 1/3/2023.
 //
-#include "server.h"
+#include "publisher.h"
 
 using boost::asio::ip::tcp;
 //struct data{
 //    int id;
 //    char[10] topic;
 //};
-int Session::id = 1111;
+int Publisher::id = 1111;
 
-void Session::doRead()
+void Publisher::doRead()
 {
     std::cout << "Server reading from socket\n" << std::flush;
     auto self(shared_from_this());
@@ -30,29 +30,26 @@ void Session::doRead()
 
 //                                   filter.insert({std::stoi(parsedData[0]),parsedData[1]});
                                    filter.insert({parsedData[1], std::stoi(parsedData[0])});
-                                   onUpdate();
+//                                   publish("IBM");
                                }
                            });
 }
 
 
-
-std::string Session::mockUpdate(std::string symbol)
+void Publisher::publish(std::string symbol)
 {
-    return "Client receiving updates on IBM\n";
-}
-
-void Session::onUpdate()
-{
-    for (const auto& [key, value] : filter)
+    auto it = filter.find(symbol);
+    if (it != filter.end())
     {
-        std::string messageToPublish = mockUpdate(key);
-        boost::asio::write(socket, boost::asio::buffer(messageToPublish));
+        boost::asio::write(socket, boost::asio::buffer(symbol));
+        std::cout << "Publishing IBM\n";
     }
+
 }
 
 
-void Session::sendId()
+
+void Publisher::sendId()
 {
     std::cout << "Assigning ID " << id << " to client " << "\n" << std::flush;
     boost::asio::write(socket, boost::asio::buffer(std::to_string(id),std::to_string(id).size()));
@@ -60,15 +57,15 @@ void Session::sendId()
 }
 
 
-void Session::start()
+void Publisher::start()
 {
     sendId();
     doRead();
-//    publish();
+//    publish("IBM");
     handleDisconnections();
 }
 
-void Session::handleDisconnections(){
+void Publisher::handleDisconnections(){
     std::cout << "Disconnected\n" << std::flush;
     auto self(shared_from_this());
     socket.async_read_some(boost::asio::buffer(data, max_length),
@@ -90,7 +87,7 @@ void Session::handleDisconnections(){
 
 
 
-void Session::doWrite()
+void Publisher::doWrite()
 {
     auto self(shared_from_this());
     boost::asio::async_write(socket, boost::asio::buffer(data),
@@ -105,7 +102,7 @@ void Session::doWrite()
 
 
 
-    void Publisher::accept()
+    void Session::accept()
     {
         std::cout << "Publisher is in accept state\n";
         acceptor.async_accept(
@@ -113,7 +110,7 @@ void Session::doWrite()
                 {
                     if (!ec)
                     {
-                        std::make_shared<Session>(std::move(socket))->start();
+                        std::make_shared<Publisher>(std::move(socket))->start();
                     }
                     accept();
                 });
