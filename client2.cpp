@@ -41,17 +41,3 @@ std::string Client::appendSymbol(std::string receivedId)
 }
 
 
-int main(int argc, char* argv[])
-{
-    std::string ip = argv[1];
-    std::string port = argv[2];
-    Client client;
-    client.connect(ip,port);
-    std::string receivedId = client.recvIdFromServer(); //rcving garbage after ID
-    std::string appendedStrToSend = client.appendSymbol(receivedId);
-    client.writeStreamOnSocket(appendedStrToSend);
-    client.recvDataFromServer();
-
-    while(1){}
-
-}

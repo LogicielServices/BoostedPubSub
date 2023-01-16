@@ -11,6 +11,7 @@
 #include <boost/asio.hpp>
 #include <map>
 #include <boost/algorithm/string.hpp>
+#include <functional>
 
 using boost::asio::ip::tcp;
 
@@ -38,7 +39,7 @@ public:
 private:
     void handleDisconnections();
     void doRead();
-    void publish();
+    void onUpdate();
     void sendId();
     void doWrite();
     std::string mockUpdate(std::string symbol);

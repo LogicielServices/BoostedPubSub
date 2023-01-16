@@ -29,7 +29,7 @@ void Session::doRead()
                                    }
 //                                   filter.insert({std::stoi(parsedData[0]),parsedData[1]});
                                    filter.insert({parsedData[1], std::stoi(parsedData[0])});
-                                   publish();
+                                   onUpdate();
                                }
                            });
 }
@@ -38,16 +38,14 @@ std::string Session::mockUpdate(std::string symbol)
     return "Publishing updates against IBM\n";
 }
 
-void Session::publish()
+void Session::onUpdate()
 {
-    for (const auto& [key, value] : filter) {
-
+    for (const auto& [key, value] : filter)
+    {
         std::string messageToPublish = mockUpdate(key);
         boost::asio::write(socket, boost::asio::buffer(messageToPublish));
     }
-
 }
-
 
 
 void Session::sendId()
@@ -56,8 +54,6 @@ void Session::sendId()
     boost::asio::write(socket, boost::asio::buffer(std::to_string(id),std::to_string(id).size()));
     id++;
 }
-
-
 
 
 void Session::start()
@@ -121,27 +117,3 @@ void Session::doWrite()
     }
 
 
-
-int main(int argc, char* argv[])
-{
-    try
-    {
-        if (argc != 2)
-        {
-            std::cerr << "Usage: async_tcp_echo_server <port>\n";
-            return 1;
-        }
-
-        boost::asio::io_context io_context;
-
-        Server s(io_context, std::atoi(argv[1]));
-
-        io_context.run();
-    }
-    catch (std::exception& e)
-    {
-        std::cerr << "Exception: " << e.what() << "\n";
-    }
-
-    return 0;
-}
