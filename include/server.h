@@ -15,9 +15,9 @@
 
 using boost::asio::ip::tcp;
 
-class Server {
+class Publisher {
 public:
-    Server(boost::asio::io_context& io_context, short port)
+    Publisher(boost::asio::io_context& io_context, short port)
     : acceptor(io_context, tcp::endpoint(tcp::v4(), port))
     {
         accept();

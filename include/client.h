@@ -11,14 +11,14 @@
 #include <sstream>
 using  boost::asio::ip::tcp;
 
-class Client {
+class Subscriber {
 public:
     boost::asio::io_context ioContext;
     tcp::socket socket;
     tcp::resolver resolver;
 
 public:
-    Client()  :
+    Subscriber()  :
             ioContext(),
             socket(ioContext),
             resolver(ioContext)

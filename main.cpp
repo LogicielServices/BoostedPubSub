@@ -1,6 +1,6 @@
 #include <iostream>
-#include "server.h"
-#include "client.h"
+#include "include/server.h"
+#include "include/client.h"
 #include <thread>
 
 
@@ -11,22 +11,22 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::thread pubThread = std::thread([=]() {
+    std::thread publisherThread = std::thread([=]() {
         boost::asio::io_context io_context;
 
-        Server s(io_context, std::atoi(argv[2]));
+        Publisher s(io_context, std::atoi(argv[2]));
         io_context.run();
     });
-    pubThread.detach();
+    publisherThread.detach();
 
     std::string ip = argv[1];
     std::string port = argv[2];
-    Client client;
-    client.connect(ip,port);
-    std::string receivedId = client.recvIdFromServer();
-    std::string appendedStrToSend = client.appendSymbol(receivedId);
-    client.writeStreamOnSocket(appendedStrToSend);
-    client.recvDataFromServer();
+    Subscriber subscriber;
+    subscriber.connect(ip,port);
+    std::string receivedId = subscriber.recvIdFromServer();
+    std::string appendedStrToSend = subscriber.appendSymbol(receivedId);
+    subscriber.writeStreamOnSocket(appendedStrToSend);
+    subscriber.recvDataFromServer();
     while(1) {}
     return 0;
 }
